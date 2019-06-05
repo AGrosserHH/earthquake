@@ -3,6 +3,7 @@
 #' This is a ggplot function that displays the data of earthquakes along an x-axis. The magnitude of the earthquake is displayed via the circle radius
 #' of each single data point. The color of each circle is symbolide based on the number of total deaths per earthquake
 #'
+#'
 #' @return The geom \code{geom_timeline} used with the \code{ggplot} function, produce a time line plot of selected earthquakes.
 #'
 #' @inheritParams ggplot2::layer
