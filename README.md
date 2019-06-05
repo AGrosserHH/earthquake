@@ -1,3 +1,5 @@
+[![Travis build status](https://travis-ci.org/AGrosserHH/earthquake.svg?branch=master)](https://travis-ci.org/AGrosserHH/earthquake)
+
 # Mastering software development in R
 ## Introduction
 In this project, you can get a R package which enables you to analyse the earthquake data set.
