@@ -9,3 +9,4 @@ With the R package it is possible to
 1) get a cleaned data set
 2) plot the data along a timeline to display when the earthquakes occured, which magnitude the earthquake had
 3) create a map in which the earthquakes are plotted at a defined position and to get some more information on the earthquake.
+
