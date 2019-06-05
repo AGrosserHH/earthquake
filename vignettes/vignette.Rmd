@@ -1,0 +1,84 @@
+---
+title: "Earthquake vignette"
+author: "Andreas Grosser"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Earthque is a Data Analysis and Visualization R package developped to work with the ["NOAA Significant Earthquake Database"](https://www.ngdc.noaa.gov/nndc/struts/form?t=101650&s=1&d=1).
+
+## Installation
+
+You can load this R library via the command
+ 
+```{r eval = TRUE}
+library(earthquake)
+library(readr)
+library(dplyr)
+library(leaflet)
+library(lubridate)
+library(ggplot2)
+library(grid)
+```
+
+# Cleaning of data
+
+The datafile is contained in the directory and can be read/ cleaned via the command 
+ 
+```{r eval = TRUE}
+setwd(system.file("extdata", package = "earthquake"))
+filename <- "earthquakes_data.txt.zip"
+data<-eq_clean_data(filename)
+```
+
+# Display of earthquake via Geom_timeline
+
+This is a ggplot function that displays the data of earthquakes along an x-axis. The magnitude of the earthquake is displayed via the circle radius of each single data point. The color of each circle is symbolide based on the number of total deaths per earthquake 
+ 
+```{r eval = TRUE}
+data %>%
+  mutate(EQ_PRIMARY = round(EQ_PRIMARY)) %>%
+  filter(datetime>"2010-01-01" & datetime<"2012-01-01")%>%
+  ggplot(aes(x=datetime, color=DEATHS, size = EQ_PRIMARY, label = LOCATION))+geom_timeline(alpha=.8)
+```
+
+# Display of earthquake names via Geom_timeline_label
+
+This is a ggplot function that adds the location of earthquakes to each data point. By using the parameter n_max, only the location with the n highest number of manitude are selected.
+ 
+```{r eval = TRUE}
+data %>%
+  mutate(EQ_PRIMARY = round(EQ_PRIMARY)) %>%
+ filter(datetime>"2010-01-01" & datetime<"2012-01-01")%>%
+ggplot(aes(x=datetime, color=DEATHS, size = EQ_PRIMARY, label = LOCATION))+geom_timeline(alpha=.8)+geom_timeline_label(n_max=5)
+```
+
+# Mapping earthquake via eq_map
+
+In order to show where the earthquake occured this can done via the following command:
+
+```{r eval = TRUE}
+data %>%
+   dplyr::filter(COUNTRY == "MEXICO" & lubridate::year(datetime) >= 2000)%>%
+   eq_map(annot_col = "datetime")
+```
+
+# Advanced annotations via eq_create_label
+
+In order to some advanced annotations this can be done following command:
+
+
+```{r eval = TRUE}
+data %>%
+   dplyr::filter(!is.na(EQ_PRIMARY)) %>%
+   dplyr::filter(COUNTRY == "MEXICO" & lubridate::year(datetime) >= 2000)   %>%
+   dplyr::mutate(conte = eq_create_label(.)) %>%
+   eq_map(annot_col = "conte")
+```
+
+
+
